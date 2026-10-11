@@ -12,7 +12,7 @@ import { SpeakerEditor } from './components/SpeakerEditor';
 import { buttonClass } from './ui';
 
 export function ControlPage() {
-  const { snapshot, connected, ready, command } = useLive();
+  const { snapshot, connected, command } = useLive();
   const [editing, setEditing] = useState<Speaker | 'new' | null>(null);
   const [message, setMessage] = useState('');
   const [previewCue, setPreviewCue] = useState(0);
@@ -180,14 +180,6 @@ export function ControlPage() {
           >
             <X size={15} />
           </button>
-        </div>
-      )}
-      {!ready && (
-        <div className="fixed inset-0 z-[90] flex flex-col items-center justify-center gap-[18px] bg-[#f5f5f3] text-xs text-[#818587]">
-          <div className="grid size-[51px] place-items-center bg-brand font-['DM_Sans'] text-[28px] font-extrabold tracking-[-5px] text-white [transform:skew(-6deg)]">
-            K<span className="mr-1 text-lg tracking-normal">▮</span>
-          </div>
-          <span>Connecting to broadcast studio…</span>
         </div>
       )}
     </AppChrome>
