@@ -1,0 +1,327 @@
+/* OBS renders this canvas at 1920 × 1080. Templates 1–4 use a shared SVG renderer;
+   the legacy CSS below remains only for templates 5–6. */
+.overlay-root,
+.overlay-body,
+.overlay-body #root {
+  width: 1920px;
+  height: 1080px;
+  margin: 0;
+  overflow: hidden;
+  background: transparent !important;
+}
+
+.overlay-canvas {
+  position: relative;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  background: transparent;
+  pointer-events: none;
+}
+
+.cg-svg-bar {
+  position: absolute;
+  bottom: 91px;
+  left: 85px;
+  width: 1400px;
+  height: 163.333px;
+  filter: drop-shadow(0 12px 17px #0005);
+  will-change: transform, opacity;
+}
+
+.cg-bar {
+  position: absolute;
+  bottom: 104px;
+  left: 85px;
+  display: flex;
+  width: 1380px;
+  height: 125px;
+  filter: drop-shadow(0 12px 17px #0005);
+  will-change: transform, opacity;
+}
+
+.cg-orange-base {
+  position: absolute;
+  inset: 0;
+  background: #f15a24;
+}
+
+.cg-brand {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex: none;
+  align-items: center;
+  width: 500px;
+  gap: 20px;
+  color: #fff;
+}
+
+.cg-brand-badge {
+  position: relative;
+  z-index: 1;
+  display: block;
+  flex: none;
+  width: 121px;
+  height: 121px;
+  border-radius: 50%;
+  background-image: url('../images/kmutnb-lower-third-reference.jpg');
+  background-repeat: no-repeat;
+  background-size: 1923px 1082px;
+  background-position: -96px -73px;
+}
+
+.cg-brand-copy {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+}
+
+.cg-brand-mark {
+  font:
+    800 47px/1 'DM Sans',
+    sans-serif;
+  letter-spacing: -0.055em;
+  white-space: nowrap;
+}
+
+.cg-brand-rule {
+  display: none;
+}
+
+.cg-brand-sub {
+  margin-top: 6px;
+  font:
+    700 12px/1.1 'DM Sans',
+    sans-serif;
+  letter-spacing: -0.015em;
+  white-space: nowrap;
+}
+
+.cg-panel {
+  position: relative;
+  z-index: 1;
+  flex: none;
+  width: 930px;
+  height: 125px;
+  margin-left: -50px;
+  transform-origin: left center;
+  will-change: transform;
+}
+
+.cg-panel-inner,
+.cg-text {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.cg-text {
+  will-change: transform, opacity;
+}
+
+.cg-name,
+.cg-title {
+  position: absolute;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  font-weight: 600;
+}
+
+.cg-name {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 76px;
+  padding: 8px 55px 5px 69px;
+  background: #fff;
+  color: #121212;
+  font-size: 48px;
+  line-height: 1.14;
+  letter-spacing: -0.035em;
+}
+
+.cg-title {
+  top: 76px;
+  left: 44px;
+  width: calc(100% - 44px);
+  height: 49px;
+  padding: 7px 25px;
+  background: #f15a24;
+  color: #fff;
+  font-size: 24px;
+  line-height: 1.3;
+  font-weight: 500;
+}
+
+.cg-end-cap {
+  position: absolute;
+  right: -14px;
+  bottom: 0;
+  width: 13px;
+  height: 49px;
+  background: #f15a24;
+  transform: skewX(27deg);
+}
+
+.cg-sweep {
+  position: absolute;
+  z-index: 5;
+  top: 0;
+  left: 0;
+  width: 140px;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, #fff9, transparent);
+  mix-blend-mode: screen;
+  pointer-events: none;
+  transform: skewX(-23deg);
+}
+
+/* The two extra templates remain available alongside the four reference layouts. */
+.cg-premium,
+.cg-speaker {
+  left: 98px;
+  bottom: 112px;
+  width: 1115px;
+  height: 182px;
+}
+
+.cg-premium .cg-orange-base {
+  background: #151719;
+  clip-path: polygon(0 0, 97% 0, 100% 100%, 0 100%);
+}
+
+.cg-premium .cg-brand,
+.cg-speaker .cg-brand {
+  display: block;
+  width: 263px;
+  padding: 40px 22px 15px 27px;
+}
+
+.cg-premium .cg-brand {
+  background: #f15a24;
+}
+
+.cg-premium .cg-brand-badge,
+.cg-speaker .cg-brand-badge {
+  display: none;
+}
+
+.cg-premium .cg-brand-mark,
+.cg-speaker .cg-brand-mark {
+  font-size: 34px;
+}
+
+.cg-premium .cg-brand-sub,
+.cg-speaker .cg-brand-sub {
+  font-size: 9px;
+  line-height: 1.4;
+}
+
+.cg-premium .cg-panel,
+.cg-speaker .cg-panel {
+  width: 852px;
+  height: 160px;
+  margin: 10px 0 0;
+}
+
+.cg-premium .cg-panel-inner,
+.cg-speaker .cg-panel-inner {
+  display: flex;
+  align-items: center;
+  padding: 15px 47px 15px 35px;
+  background: #202426;
+  clip-path: polygon(0 0, 96% 0, 100% 100%, 0 100%);
+  border-bottom: 5px solid #f15a24;
+}
+
+.cg-premium .cg-text,
+.cg-speaker .cg-text {
+  height: auto;
+}
+
+.cg-premium .cg-name,
+.cg-speaker .cg-name,
+.cg-premium .cg-title,
+.cg-speaker .cg-title {
+  position: relative;
+  top: auto;
+  left: auto;
+  width: 100%;
+  height: auto;
+  padding: 0;
+  background: none;
+}
+
+.cg-premium .cg-name,
+.cg-speaker .cg-name {
+  max-height: 130px;
+  color: #fff;
+  font-size: 59px;
+}
+
+.cg-premium .cg-title,
+.cg-speaker .cg-title {
+  max-height: 66px;
+  margin-top: 5px;
+  color: #c5c9ca;
+  font-size: 23px;
+}
+
+.cg-speaker .cg-orange-base,
+.cg-speaker .cg-brand {
+  background: #292d30;
+}
+
+.cg-speaker .cg-brand {
+  width: 230px;
+}
+
+.cg-speaker .cg-brand-rule {
+  display: block;
+  width: 35px;
+  height: 2px;
+  margin: 11px 0 8px;
+  background: #f15a24;
+}
+
+.cg-brand-event,
+.cg-kicker {
+  margin-top: 11px;
+  color: #f15a24;
+  font:
+    800 10px 'DM Sans',
+    sans-serif;
+  letter-spacing: 0.15em;
+}
+
+.cg-speaker .cg-panel {
+  width: 885px;
+  height: 182px;
+  margin: 0;
+}
+
+.cg-speaker .cg-panel-inner {
+  border-top: 8px solid #f15a24;
+  border-bottom: 0;
+  background: #f8f7f4;
+  clip-path: none;
+}
+
+.cg-speaker .cg-kicker {
+  margin: 0 0 6px;
+}
+
+.cg-speaker .cg-name {
+  color: #161616;
+  font-size: 53px;
+}
+
+.cg-speaker .cg-title {
+  color: #5d6061;
+  font-size: 22px;
+}
+
+.cg-speaker .cg-end-cap {
+  display: none;
+}
