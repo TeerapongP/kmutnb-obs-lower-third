@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { useAnimationControls } from 'motion/react';
 import type { LowerThirdAnimationSettings } from '../../shared/types';
+import { classicSweep, classicSweepTarget } from '../animations/classicSweep';
 import { createAnimationPlan, partTransition } from '../animations/presets';
 
 type Controls = ReturnType<typeof useAnimationControls>;
@@ -20,6 +21,7 @@ type Options = {
   cue: number;
   active: boolean;
   staticPreview?: boolean;
+  classic?: boolean;
 };
 
 export function useLowerThirdAnimation({
@@ -28,6 +30,7 @@ export function useLowerThirdAnimation({
   cue,
   active,
   staticPreview = false,
+  classic = false,
 }: Options) {
   const container = useAnimationControls();
   const logo = useAnimationControls();
@@ -48,11 +51,18 @@ export function useLowerThirdAnimation({
     const all = [container, logo, panel, name, subtitle, decoration, sweep];
     for (const control of all) control.stop();
 
+    const resetSweep = () =>
+      sweep.set({
+        x: classic ? 0 : -420,
+        attrX: classic ? classicSweep.startX : -420,
+        opacity: 0,
+      });
+
     const setFinalState = (isVisible: boolean) => {
       container.set(isVisible ? plan.shown : plan.hidden);
       for (const control of [logo, panel, name, subtitle, decoration])
         control.set(isVisible ? plan.partShown : plan.partHidden);
-      sweep.set({ x: -420, opacity: 0 });
+      resetSweep();
     };
 
     if (staticPreview || !animation.enabled) {
@@ -90,12 +100,12 @@ export function useLowerThirdAnimation({
         });
       }
       void container.start(plan.hidden);
-      sweep.set({ x: -420, opacity: 0 });
+      resetSweep();
       return;
     }
 
     container.set(plan.hidden);
-    sweep.set({ x: -420, opacity: 0 });
+    resetSweep();
     if (plan.staggered) {
       for (const control of [logo, panel, name, subtitle, decoration])
         control.set(plan.partHidden);
@@ -114,7 +124,7 @@ export function useLowerThirdAnimation({
     }
     if (plan.sweep) {
       void sweep.start({
-        x: 1510,
+        ...(classic ? { attrX: classicSweepTarget.endX } : { x: 1510 }),
         opacity: [0, 0.9, 0],
         transition: {
           duration: Math.max(0.45, animation.duration * 0.72),
@@ -126,6 +136,7 @@ export function useLowerThirdAnimation({
   }, [
     active,
     animation,
+    classic,
     container,
     cue,
     decoration,

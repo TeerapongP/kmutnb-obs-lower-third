@@ -36,6 +36,7 @@ export function LowerThirdAnimator({
     cue,
     active: Boolean(name),
     staticPreview,
+    classic: variant === 'classic',
   });
 
   if (!variant) return null;
