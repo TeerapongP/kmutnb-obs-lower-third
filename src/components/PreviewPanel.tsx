@@ -39,11 +39,12 @@ export function PreviewPanel({
         <div className="flex items-center gap-5 max-[680px]:gap-2">
           <span
             className={`flex items-center gap-[7px] font-['DM_Sans'] text-[10px] font-extrabold tracking-[0.11em] ${snapshot.live.visible ? 'text-[#e15b2d]' : 'text-[#83888a]'}`}
+            aria-label={`Application overlay ${snapshot.live.visible ? 'visible' : 'hidden'}`}
           >
             <span
               className={`size-[7px] rounded-full ${snapshot.live.visible ? 'bg-brand shadow-[0_0_0_4px_#f15a2420]' : 'bg-[#aeb3b5]'}`}
             />
-            {snapshot.live.visible ? 'ON AIR' : 'OFF AIR'}
+            {snapshot.live.visible ? 'OVERLAY VISIBLE' : 'OVERLAY HIDDEN'}
           </span>
           <span className="flex items-center gap-1.5 text-[11px] text-[#72787b] max-[680px]:hidden">
             {templateInfo[snapshot.settings.template].name} design{' '}

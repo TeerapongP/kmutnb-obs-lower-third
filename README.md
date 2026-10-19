@@ -37,7 +37,7 @@ The overlay has a transparent page background, no controls, and no scrolling. Mu
 
 ## Designs and controls
 
-The design picker includes Classic, Angular, Overlay, and Rounded. All four use the shared SVG renderer in `src/components/LowerThird.tsx`, editable speaker text, and the KMUTNB seal in `public/assets/kmutnb-seal.png`. They share speaker data, animation settings, and live commands. Selecting a design or editing an active speaker updates connected overlays without refreshing OBS.
+The design picker includes Classic, Angular, Overlay, and Rounded. All four use the shared SVG renderer in `src/components/LowerThird.tsx` with editable speaker text. Classic uses `public/assets/Classic_1.svg`; the other designs use the KMUTNB seal in `public/assets/kmutnb-seal.png`. They share speaker data, animation settings, and live commands. Selecting a design or editing an active speaker updates connected overlays without refreshing OBS.
 
 Speaker fields are name, academic title, position, and department/faculty. Thai and English input are supported. Long names shrink to fit the name panel, and long titles wrap within the bar. The initial demo names are fictional examples, not claims about KMUTNB staff.
 

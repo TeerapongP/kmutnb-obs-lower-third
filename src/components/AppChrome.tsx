@@ -3,6 +3,7 @@ import {
   ChevronRight,
   CircleHelp,
   Clapperboard,
+  LayoutDashboard,
   LayoutTemplate,
   Menu,
   Radio,
@@ -71,6 +72,14 @@ export function AppChrome({
             />
             Overview
             <span className="absolute right-0 h-6 w-[3px] rounded-l-[3px] bg-brand" />
+          </a>
+          <a
+            className={sideLink}
+            href="#dashboard"
+            onClick={() => setNavOpen(false)}
+          >
+            <LayoutDashboard size={18} />
+            Dashboard
           </a>
           <a
             className={sideLink}

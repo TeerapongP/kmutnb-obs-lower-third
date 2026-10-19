@@ -3,11 +3,13 @@ import { motion, useAnimationControls } from 'motion/react';
 import {
   displayName,
   displaySubtitle,
+  type Template,
   type Snapshot,
   type Speaker,
 } from '../shared/types';
 import { useLive } from './live';
 import { LowerThirdAnimator } from './animations/LowerThirdAnimator';
+import type { LowerThirdVariant } from './components/LowerThird';
 
 function Brand({ template }: { template: string }) {
   return (
@@ -62,16 +64,18 @@ export function CGBar({
   staticPreview?: boolean;
 }) {
   if (!speaker) return null;
-  const name = displayName(speaker);
-  const title = displaySubtitle(speaker);
-  const usesSvg = !['premium', 'speaker'].includes(snapshot.settings.template);
+  const definition = templateRegistry[snapshot.settings.template];
 
-  if (usesSvg) {
+  if (definition.renderer === 'svg') {
+    const Renderer = definition.component;
     return (
-      <LowerThirdAnimator
-        template={snapshot.settings.template}
-        name={name}
-        title={title || 'มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าพระนครเหนือ'}
+      <Renderer
+        variant={definition.variant}
+        name={displayName(speaker)}
+        title={
+          displaySubtitle(speaker) ||
+          'มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าพระนครเหนือ'
+        }
         animation={snapshot.settings.animation}
         visible={snapshot.live.visible}
         cue={snapshot.live.cue}
@@ -80,8 +84,9 @@ export function CGBar({
     );
   }
 
+  const Renderer = definition.component;
   return (
-    <LegacyCGBar
+    <Renderer
       speaker={speaker}
       snapshot={snapshot}
       staticPreview={staticPreview}
@@ -235,6 +240,26 @@ function LegacyCGBar({
     </motion.div>
   );
 }
+
+type TemplateDefinition =
+  | {
+      renderer: 'svg';
+      component: typeof LowerThirdAnimator;
+      variant: LowerThirdVariant;
+    }
+  | {
+      renderer: 'legacy';
+      component: typeof LegacyCGBar;
+    };
+
+export const templateRegistry = {
+  standard: { renderer: 'svg', component: LowerThirdAnimator, variant: 'classic' },
+  modern: { renderer: 'svg', component: LowerThirdAnimator, variant: 'angular' },
+  glass: { renderer: 'svg', component: LowerThirdAnimator, variant: 'overlay' },
+  minimal: { renderer: 'svg', component: LowerThirdAnimator, variant: 'rounded' },
+  premium: { renderer: 'legacy', component: LegacyCGBar },
+  speaker: { renderer: 'legacy', component: LegacyCGBar },
+} as const satisfies Record<Template, TemplateDefinition>;
 
 export function OverlayCanvas({ snapshot }: { snapshot: Snapshot }) {
   const speaker =

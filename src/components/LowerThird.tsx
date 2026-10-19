@@ -1,5 +1,6 @@
 import { useId, type CSSProperties } from 'react';
 import { motion } from 'motion/react';
+import { classicArtwork, classicSweep } from '../animations/classicSweep';
 import type { LowerThirdPartControls } from '../hooks/useLowerThirdAnimation';
 
 export type LowerThirdVariant = 'classic' | 'angular' | 'overlay' | 'rounded';
@@ -120,6 +121,8 @@ function TextContent({
   color = '#111',
   subtitleColor = 'white',
   width = 655,
+  nameY = 20,
+  subtitleY = 79,
   parts,
   staggerParts,
 }: {
@@ -129,6 +132,8 @@ function TextContent({
   color?: string;
   subtitleColor?: string;
   width?: number;
+  nameY?: number;
+  subtitleY?: number;
   parts?: LowerThirdPartControls;
   staggerParts: boolean;
 }) {
@@ -140,7 +145,7 @@ function TextContent({
       >
         <foreignObject
           x={x}
-          y="20"
+          y={nameY}
           width={width}
           height="51"
         >
@@ -166,7 +171,7 @@ function TextContent({
       >
         <foreignObject
           x={x}
-          y="79"
+          y={subtitleY}
           width={width}
           height="36"
         >
@@ -191,15 +196,6 @@ function TextContent({
 }
 
 function ShapeClip({ variant }: { variant: LowerThirdVariant }) {
-  if (variant === 'classic') {
-    return (
-      <>
-        <path d="M9 14Q9 7 18 7H389L425 123H18Q9 123 9 115Z" />
-        <path d="M414 8H1059L1086 71H420Z" />
-        <path d="M421 70H1147L1184 123H435Z" />
-      </>
-    );
-  }
   if (variant === 'angular') {
     return (
       <>
@@ -260,7 +256,7 @@ export function LowerThird({
         overflow: 'visible',
         ...style,
       }}
-      viewBox="0 0 1200 140"
+      viewBox={variant === 'classic' ? `0 0 ${classicArtwork.width} ${classicArtwork.height}` : '0 0 1200 140'}
       preserveAspectRatio="xMidYMid meet"
       xmlns="http://www.w3.org/2000/svg"
       role="img"
@@ -326,9 +322,28 @@ export function LowerThird({
             stopOpacity="0"
           />
         </linearGradient>
-        <clipPath id={shape}>
-          <ShapeClip variant={variant} />
-        </clipPath>
+        {variant === 'classic' ? (
+          <mask
+            id={shape}
+            x="0"
+            y="0"
+            width={classicArtwork.width}
+            height={classicArtwork.height}
+            maskUnits="userSpaceOnUse"
+            maskContentUnits="userSpaceOnUse"
+            style={{ maskType: 'alpha' }}
+          >
+            <image
+              href="/assets/Classic_1.svg"
+              width={classicArtwork.width}
+              height={classicArtwork.height}
+            />
+          </mask>
+        ) : (
+          <clipPath id={shape}>
+            <ShapeClip variant={variant} />
+          </clipPath>
+        )}
       </defs>
 
       {variant === 'classic' && (
@@ -337,52 +352,34 @@ export function LowerThird({
             initial={false}
             animate={panelAnimation}
           >
-            <path
-              d="M9 14Q9 7 18 7H389L425 123H18Q9 123 9 115Z"
-              fill={O}
-            />
-            <path
-              d="M414 8Q402 8 400 19L420 71H1086L1059 8Z"
-              fill={`url(#${white})`}
-            />
-            <path
-              d="M421 70H1147L1184 123H435Z"
-              fill={O}
-            />
-          </motion.g>
-          <motion.g
-            initial={false}
-            animate={decorationAnimation}
-          >
-            <path
-              d="M387 7L400 7 435 123 422 123Z"
-              fill="#11151a"
-            />
-            <path
-              d="M1148 70H1162L1191 123H1178Z"
-              fill="#12161a"
-            />
-            <path
-              d="M1166 70H1173L1199 123H1193Z"
-              fill="#fb632e"
-            />
+            <use href="/assets/Classic_1.svg#classic-panel-base" />
           </motion.g>
           <motion.g
             initial={false}
             animate={logoAnimation}
           >
-            <Identity
-              x={23}
-              y={19}
-              logoSrc={logoSrc}
-              logoSize={87}
-            />
+            <use href="/assets/Classic_1.svg#classic-logo" />
+          </motion.g>
+          <motion.g
+            initial={false}
+            animate={panelAnimation}
+          >
+            <use href="/assets/Classic_1.svg#classic-panel-body" />
+          </motion.g>
+          <motion.g
+            initial={false}
+            animate={decorationAnimation}
+          >
+            <use href="/assets/Classic_1.svg#classic-decoration" />
           </motion.g>
           <TextContent
             name={name}
             subtitle={subtitle}
-            x={450}
-            width={620}
+            x={525}
+            width={775}
+            nameY={40}
+            subtitleY={112}
+            subtitleColor="white"
             parts={parts}
             staggerParts={staggerParts}
           />
@@ -613,7 +610,24 @@ export function LowerThird({
         </g>
       )}
 
-      {parts && (
+      {parts && variant === 'classic' && (
+        <g mask={`url(#${shape})`}>
+          <g transform={`skewX(${classicSweep.skewDegrees})`}>
+            <motion.rect
+              initial={false}
+              animate={parts.sweep}
+              x={classicSweep.x}
+              y={classicSweep.y}
+              width={classicSweep.width}
+              height={classicSweep.height}
+              fill={`url(#${sweep})`}
+              style={{ mixBlendMode: 'screen' }}
+            />
+          </g>
+        </g>
+      )}
+
+      {parts && variant !== 'classic' && (
         <motion.rect
           initial={false}
           animate={parts.sweep}

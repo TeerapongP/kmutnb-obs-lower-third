@@ -1,17 +1,10 @@
 import { motion } from 'motion/react';
-import type { LowerThirdAnimationSettings, Template } from '../../shared/types';
+import type { LowerThirdAnimationSettings } from '../../shared/types';
 import { LowerThird, type LowerThirdVariant } from '../components/LowerThird';
 import { useLowerThirdAnimation } from '../hooks/useLowerThirdAnimation';
 
-const variantByTemplate: Partial<Record<Template, LowerThirdVariant>> = {
-  standard: 'classic',
-  modern: 'angular',
-  glass: 'overlay',
-  minimal: 'rounded',
-};
-
 type Props = {
-  template: Template;
+  variant: LowerThirdVariant;
   name: string;
   title: string;
   animation: LowerThirdAnimationSettings;
@@ -21,7 +14,7 @@ type Props = {
 };
 
 export function LowerThirdAnimator({
-  template,
+  variant,
   name,
   title,
   animation,
@@ -29,16 +22,14 @@ export function LowerThirdAnimator({
   cue,
   staticPreview = false,
 }: Props) {
-  const variant = variantByTemplate[template];
   const { container, parts } = useLowerThirdAnimation({
     animation,
     visible,
     cue,
     active: Boolean(name),
     staticPreview,
+    classic: variant === 'classic',
   });
-
-  if (!variant) return null;
 
   return (
     <motion.div
