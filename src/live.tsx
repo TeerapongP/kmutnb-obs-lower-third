@@ -17,6 +17,7 @@ type LiveContextValue = {
   snapshot: Snapshot;
   connected: boolean;
   ready: boolean;
+  connectionError: string | null;
   command: (command: Command) => Promise<void>;
 };
 
@@ -35,21 +36,29 @@ export function LiveProvider({ children }: { children: ReactNode }) {
   });
   const [connected, setConnected] = useState(socket.connected);
   const [ready, setReady] = useState(false);
+  const [connectionError, setConnectionError] = useState<string | null>(null);
 
   useEffect(() => {
-    const onConnect = () => setConnected(true);
+    const onConnect = () => {
+      setConnected(true);
+      setConnectionError(null);
+    };
     const onDisconnect = () => setConnected(false);
+    const onConnectError = (error: Error) => setConnectionError(error.message);
     const onSnapshot = (next: Snapshot) => {
       setSnapshot(next);
       setReady(true);
+      setConnectionError(null);
     };
     socket.on('connect', onConnect);
     socket.on('disconnect', onDisconnect);
+    socket.on('connect_error', onConnectError);
     socket.on('snapshot', onSnapshot);
     socket.connect();
     return () => {
       socket.off('connect', onConnect);
       socket.off('disconnect', onDisconnect);
+      socket.off('connect_error', onConnectError);
       socket.off('snapshot', onSnapshot);
       socket.disconnect();
     };
@@ -60,6 +69,7 @@ export function LiveProvider({ children }: { children: ReactNode }) {
       snapshot,
       connected,
       ready,
+      connectionError,
       command: (command) =>
         new Promise<void>((resolve, reject) => {
           if (!socket.connected)
@@ -80,7 +90,7 @@ export function LiveProvider({ children }: { children: ReactNode }) {
             );
         }),
     }),
-    [snapshot, connected, ready],
+    [snapshot, connected, ready, connectionError],
   );
 
   return <LiveContext.Provider value={value}>{children}</LiveContext.Provider>;

@@ -9,10 +9,11 @@ import { AnimationSettings } from './components/AnimationSettings';
 import { DesignLibrary } from './components/DesignLibrary';
 import { SpeakerList } from './components/SpeakerList';
 import { SpeakerEditor } from './components/SpeakerEditor';
+import { DashboardSection } from './components/DashboardSection';
 import { buttonClass } from './ui';
 
 export function ControlPage() {
-  const { snapshot, connected, command } = useLive();
+  const { snapshot, connected, ready, connectionError, command } = useLive();
   const [editing, setEditing] = useState<Speaker | 'new' | null>(null);
   const [message, setMessage] = useState('');
   const [previewCue, setPreviewCue] = useState(0);
@@ -91,6 +92,12 @@ export function ControlPage() {
             </button>
           </div>
         </div>
+        <DashboardSection
+          snapshot={snapshot}
+          ready={ready}
+          connected={connected}
+          connectionError={connectionError}
+        />
         <PreviewPanel
           snapshot={snapshot}
           previewCue={previewCue}
@@ -112,16 +119,18 @@ export function ControlPage() {
           selected={snapshot.settings.template}
           onSelect={(template: Template) => setting({ template })}
         />
-        <SpeakerList
-          speakers={snapshot.speakers}
-          selectedId={snapshot.selectedSpeakerId}
-          connected={connected}
-          onSelect={(id) => run('select', id)}
-          onShow={(id) => run('show', id)}
-          onEdit={setEditing}
-          onDelete={remove}
-          onAdd={() => setEditing('new')}
-        />
+        {ready && (
+          <SpeakerList
+            speakers={snapshot.speakers}
+            selectedId={snapshot.selectedSpeakerId}
+            connected={connected}
+            onSelect={(id) => run('select', id)}
+            onShow={(id) => run('show', id)}
+            onEdit={setEditing}
+            onDelete={remove}
+            onAdd={() => setEditing('new')}
+          />
+        )}
         <section
           id="guide"
           className="mt-[21px] flex items-center gap-[15px] rounded-[7px] bg-[#24282b] px-[22px] py-[19px] text-white max-[680px]:items-start max-[680px]:flex-wrap"
