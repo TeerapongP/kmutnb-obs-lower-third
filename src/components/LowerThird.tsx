@@ -38,6 +38,7 @@ function TextContent({
   width = 655,
   nameY = 20,
   subtitleY = 79,
+  nameFontSize = 34,
   subtitleFontSize = 14,
   parts,
   staggerParts,
@@ -50,6 +51,7 @@ function TextContent({
   width?: number;
   nameY?: number;
   subtitleY?: number;
+  nameFontSize?: number;
   subtitleFontSize?: number;
   parts?: LowerThirdPartControls;
   staggerParts: boolean;
@@ -71,7 +73,7 @@ function TextContent({
               color,
               fontFamily: "'Noto Sans Thai','Sarabun','Prompt',sans-serif",
               fontWeight: 800,
-              fontSize: 34,
+              fontSize: nameFontSize,
               lineHeight: '48px',
               whiteSpace: 'nowrap',
               overflow: 'hidden',
@@ -308,7 +310,9 @@ export function LowerThird({
             width={775}
             nameY={40}
             subtitleY={112}
+            nameFontSize={42}
             subtitleColor="white"
+            subtitleFontSize={17}
             parts={parts}
             staggerParts={staggerParts}
           />

@@ -5,11 +5,9 @@ import { buttonClass, cardClass, eyebrowClass, sectionHeadingClass } from '../ui
 type Action = 'show' | 'hide' | 'next' | 'replay';
 export function OnAirControls({
   speaker,
-  connected,
   onAction,
 }: {
   speaker: Speaker | null;
-  connected: boolean;
   onAction: (action: Action) => void;
 }) {
   return (
@@ -22,17 +20,17 @@ export function OnAirControls({
           <Radio size={20} />
         </div>
         <div>
-          <p className={eyebrowClass}>LIVE CONTROLS</p>
+          <p className={eyebrowClass}>PREVIEW CONTROLS</p>
           <h2
             id="control-title"
             className={`${sectionHeadingClass} text-[15px]`}
           >
-            On-air operation
+            Studio controls
           </h2>
         </div>
       </div>
       <p className="mb-[17px] mt-[13px] text-[11px] text-[#9da1a2]">
-        Cue graphics instantly across every connected OBS source.
+        Show and hide the selected graphic in this browser preview.
       </p>
       <div className="flex h-[67px] items-center gap-[11px] rounded-[5px] border border-[#eceeed] bg-[#fafafa] px-3 py-2">
         <div className="grid size-[39px] flex-none place-items-center rounded bg-[#f7e4db] text-[13px] font-bold text-[#c85a30]">
@@ -57,7 +55,7 @@ export function OnAirControls({
       <div className="mt-3 grid grid-cols-2 gap-[9px]">
         <button
           className={buttonClass('primary', 'h-[43px]')}
-          disabled={!speaker || !connected}
+          disabled={!speaker}
           onClick={() => onAction('show')}
         >
           <Play
@@ -68,7 +66,6 @@ export function OnAirControls({
         </button>
         <button
           className={buttonClass('dark', 'h-[43px]')}
-          disabled={!connected}
           onClick={() => onAction('hide')}
         >
           <EyeOff size={17} />
@@ -78,7 +75,7 @@ export function OnAirControls({
       <div className="mt-[10px] grid grid-cols-2 gap-2">
         <button
           className="flex h-[37px] items-center justify-center gap-2 rounded border border-[#e9eaea] bg-transparent text-[10px] font-semibold text-[#6b7072] hover:bg-[#f7f7f6] hover:text-[#2d3133] disabled:cursor-not-allowed disabled:opacity-50"
-          disabled={!speaker || !connected}
+          disabled={!speaker}
           onClick={() => onAction('next')}
         >
           <FastForward size={17} />
@@ -86,7 +83,7 @@ export function OnAirControls({
         </button>
         <button
           className="flex h-[37px] items-center justify-center gap-2 rounded border border-[#e9eaea] bg-transparent text-[10px] font-semibold text-[#6b7072] hover:bg-[#f7f7f6] hover:text-[#2d3133] disabled:cursor-not-allowed disabled:opacity-50"
-          disabled={!speaker || !connected}
+          disabled={!speaker}
           onClick={() => onAction('replay')}
         >
           <RotateCcw size={17} />

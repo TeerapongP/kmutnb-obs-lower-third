@@ -7,7 +7,6 @@ import {
   type Snapshot,
   type Speaker,
 } from '../shared/types';
-import { useLive } from './live';
 import { LowerThirdAnimator } from './animations/LowerThirdAnimator';
 import type { LowerThirdVariant } from './components/LowerThird';
 
@@ -72,10 +71,7 @@ export function CGBar({
       <Renderer
         variant={definition.variant}
         name={displayName(speaker)}
-        title={
-          displaySubtitle(speaker) ||
-          'มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าพระนครเหนือ'
-        }
+        title={displaySubtitle(speaker) || 'มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าพระนครเหนือ'}
         animation={snapshot.settings.animation}
         visible={snapshot.live.visible}
         cue={snapshot.live.cue}
@@ -272,19 +268,6 @@ export function OverlayCanvas({ snapshot }: { snapshot: Snapshot }) {
       />
     </div>
   );
-}
-
-export function OverlayPage() {
-  const { snapshot, ready } = useLive();
-  useEffect(() => {
-    document.documentElement.classList.add('overlay-root');
-    document.body.classList.add('overlay-body');
-    return () => {
-      document.documentElement.classList.remove('overlay-root');
-      document.body.classList.remove('overlay-body');
-    };
-  }, []);
-  return ready ? <OverlayCanvas snapshot={snapshot} /> : null;
 }
 
 export function PreviewStage({ snapshot }: { snapshot: Snapshot }) {

@@ -27,12 +27,12 @@ export function PreviewPanel({
     >
       <div className="flex items-center justify-between gap-[18px]">
         <div>
-          <p className={eyebrowClass}>OUTPUT MONITOR</p>
+          <p className={eyebrowClass}>PREVIEW MONITOR</p>
           <h2
             id="preview-title"
             className={sectionHeadingClass}
           >
-            Live preview <span className="mx-1 font-normal text-[#d1d3d4]">/</span>{' '}
+            Studio preview <span className="mx-1 font-normal text-[#d1d3d4]">/</span>{' '}
             <span className="font-normal text-[#a3a6a7]">1920 × 1080</span>
           </h2>
         </div>
@@ -59,7 +59,7 @@ export function PreviewPanel({
         <div className="pointer-events-none absolute bottom-[17px] left-[17px] size-[14px] border-b border-l border-[#fff9]" />
         <div className="pointer-events-none absolute bottom-[17px] right-[17px] size-[14px] border-b border-r border-[#fff9]" />
         <span className="absolute left-[42px] top-[22px] font-['DM_Sans'] text-[9px] font-extrabold tracking-[0.16em] text-[#777b7bb0]">
-          PROGRAM OUTPUT
+          LOCAL PREVIEW
         </span>
       </div>
       <div className="flex items-center justify-between px-px py-[14px] text-[10px] text-[#8b9091]">

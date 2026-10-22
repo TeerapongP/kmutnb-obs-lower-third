@@ -3,14 +3,10 @@ import { cardClass, eyebrowClass, sectionHeadingClass } from '../ui';
 
 export function DashboardSection({
   snapshot,
-  ready,
-  connected,
-  connectionError,
+  persistenceError,
 }: {
   snapshot: Snapshot;
-  ready: boolean;
-  connected: boolean;
-  connectionError: string | null;
+  persistenceError: string | null;
 }) {
   const selected = snapshot.speakers.find(
     (speaker) => speaker.id === snapshot.selectedSpeakerId,
@@ -39,44 +35,30 @@ export function DashboardSection({
         Dashboard
       </h2>
       <p className="mb-[18px] mt-1.5 text-[11px] text-[#8b8f92]">
-        Application state for your lineup and graphics. OBS broadcast status is not
-        monitored.
+        Your lineup and graphics are saved in this browser. External broadcast status is
+        not connected.
       </p>
-      {!ready ? (
+      {persistenceError && (
         <div
-          className={`${cardClass} p-5 text-xs text-[#686e71]`}
-          role={connectionError ? 'alert' : 'status'}
+          className={`${cardClass} mb-[13px] p-4 text-xs text-[#9c5b22]`}
+          role="alert"
         >
-          {connectionError
-            ? 'Could not load dashboard data. The server connection failed; retrying automatically.'
-            : 'Loading dashboard data…'}
+          {persistenceError}
         </div>
-      ) : (
-        <>
-          {!connected && (
-            <p
-              className="mb-[13px] rounded border border-[#f1d6ba] bg-[#fff5e9] px-4 py-3 text-xs text-[#9c5b22]"
-              role="status"
-            >
-              Connection lost. Showing the last received data; it may be out of date.
-              Reconnecting automatically.
-            </p>
-          )}
-          <dl className="m-0 grid grid-cols-4 gap-[17px] max-[1200px]:grid-cols-2 max-[680px]:grid-cols-1">
-            {summary.map(({ label, value }) => (
-              <div
-                key={label}
-                className={`${cardClass} min-w-0 p-[19px]`}
-              >
-                <dt className="text-[11px] font-medium text-[#8b8f92]">{label}</dt>
-                <dd className="m-0 mt-2 break-words text-[19px] font-semibold leading-snug tracking-[-0.035em]">
-                  {value}
-                </dd>
-              </div>
-            ))}
-          </dl>
-        </>
       )}
+      <dl className="m-0 grid grid-cols-4 gap-[17px] max-[1200px]:grid-cols-2 max-[680px]:grid-cols-1">
+        {summary.map(({ label, value }) => (
+          <div
+            key={label}
+            className={`${cardClass} min-w-0 p-[19px]`}
+          >
+            <dt className="text-[11px] font-medium text-[#8b8f92]">{label}</dt>
+            <dd className="m-0 mt-2 break-words text-[19px] font-semibold leading-snug tracking-[-0.035em]">
+              {value}
+            </dd>
+          </div>
+        ))}
+      </dl>
     </section>
   );
 }

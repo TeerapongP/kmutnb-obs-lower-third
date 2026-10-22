@@ -1,39 +1,18 @@
 import { useState, type ReactNode } from 'react';
 import {
   ChevronRight,
-  CircleHelp,
   Clapperboard,
   LayoutDashboard,
   LayoutTemplate,
   Menu,
-  Radio,
   Settings2,
   Users,
 } from 'lucide-react';
 
-function Status({ connected }: { connected: boolean }) {
-  return (
-    <span
-      className={`flex items-center gap-[7px] whitespace-nowrap rounded-full px-[11px] py-2 font-['DM_Sans'] text-[10px] font-bold ${connected ? 'bg-[#e7f5eb] text-[#257b4b]' : 'bg-[#fff1e4] text-[#9c5b22]'}`}
-    >
-      <span
-        className={`size-1.5 rounded-full ${connected ? 'bg-[#39af6a] shadow-[0_0_0_3px_#39af6a25]' : 'bg-[#ed9b54]'}`}
-      />
-      {connected ? 'System online' : 'Reconnecting…'}
-    </span>
-  );
-}
-
 const sideLink =
   'group relative my-0.5 flex h-[43px] items-center gap-[14px] rounded-[5px] px-[15px] text-xs font-medium text-[#a5a9ad] hover:bg-[#2a2d2f] hover:text-white';
 
-export function AppChrome({
-  children,
-  connected,
-}: {
-  children: ReactNode;
-  connected: boolean;
-}) {
+export function AppChrome({ children }: { children: ReactNode }) {
   const [navOpen, setNavOpen] = useState(false);
   return (
     <div className="flex min-h-screen">
@@ -110,25 +89,13 @@ export function AppChrome({
             <Settings2 size={18} />
             Settings
           </a>
-          <a
-            className={sideLink}
-            href="#guide"
-            onClick={() => setNavOpen(false)}
-          >
-            <CircleHelp size={18} />
-            OBS setup
-          </a>
         </div>
         <div className="mt-auto px-[17px] pb-[23px] pt-[18px]">
           <div className="flex gap-3 rounded-[7px] border border-[#ffffff10] bg-[#242729] p-[15px]">
-            <Radio
-              className="text-brand"
-              size={17}
-            />
             <div>
-              <strong className="block text-[11px]">Broadcast ready</strong>
+              <strong className="block text-[11px]">Local workspace</strong>
               <span className="mt-1 block font-['DM_Sans'] text-[10px] font-medium text-[#8c9093]">
-                1920 × 1080 canvas
+                Saved in this browser
               </span>
             </div>
           </div>
@@ -156,9 +123,12 @@ export function AppChrome({
           </div>
           <div className="flex items-center gap-[18px] max-[680px]:gap-2">
             <span className="font-['DM_Sans'] text-[10px] font-bold tracking-[0.13em] text-[#aaadb0] max-[900px]:hidden">
-              OBS BROWSER SOURCE
+              LOWER THIRD STUDIO
             </span>
-            <Status connected={connected} />
+            <span className="flex items-center gap-[7px] whitespace-nowrap rounded-full bg-[#e7f5eb] px-[11px] py-2 font-['DM_Sans'] text-[10px] font-bold text-[#257b4b]">
+              <span className="size-1.5 rounded-full bg-[#39af6a]" />
+              Ready in browser
+            </span>
             <span className="grid size-[31px] place-items-center rounded-full bg-[#f1e9e4] font-['DM_Sans'] text-[10px] font-bold text-[#a44b29]">
               KM
             </span>

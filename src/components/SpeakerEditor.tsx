@@ -1,7 +1,6 @@
 import { useState, type SubmitEvent } from 'react';
 import { Save, X } from 'lucide-react';
 import type { Speaker } from '../../shared/types';
-import { api } from '../live';
 import { buttonClass, eyebrowClass, iconButtonClass } from '../ui';
 
 type Form = Pick<Speaker, 'name' | 'academicTitle' | 'position' | 'department'>;
@@ -11,10 +10,12 @@ export function SpeakerEditor({
   speaker,
   onClose,
   onError,
+  onSave,
 }: {
   speaker: Speaker | null;
   onClose: () => void;
   onError: (message: string) => void;
+  onSave: (form: Form) => void;
 }) {
   const [form, setForm] = useState<Form>(
     speaker
@@ -26,7 +27,6 @@ export function SpeakerEditor({
         }
       : empty,
   );
-  const [saving, setSaving] = useState(false);
   function field(key: keyof Form, label: string, placeholder: string, required = false) {
     return (
       <label
@@ -45,21 +45,19 @@ export function SpeakerEditor({
       </label>
     );
   }
-  async function save(event: SubmitEvent) {
+  function save(event: SubmitEvent) {
     event.preventDefault();
-    setSaving(true);
-    try {
-      await api(
-        speaker ? `/speakers/${speaker.id}` : '/speakers',
-        speaker ? 'PUT' : 'POST',
-        form,
-      );
-      onClose();
-    } catch (error) {
-      onError(error instanceof Error ? error.message : 'Could not save speaker.');
-    } finally {
-      setSaving(false);
+    const normalized = Object.fromEntries(
+      Object.entries(form).map(([key, value]) => [key, value.trim()]),
+    ) as Form;
+    if (!normalized.name) {
+      onError('Enter a speaker name.');
+      return;
     }
+    onSave(normalized);
+  }
+  function submit(event: SubmitEvent) {
+    save(event);
   }
   return (
     <div
@@ -92,7 +90,7 @@ export function SpeakerEditor({
             <X size={20} />
           </button>
         </div>
-        <form onSubmit={(event) => void save(event)}>
+        <form onSubmit={submit}>
           {field('name', 'Speaker name *', 'e.g. ดร. กานต์ชนก วัฒนกุล', true)}
           <div className="grid grid-cols-[1fr_1.4fr] gap-3 max-[680px]:grid-cols-1">
             {field('academicTitle', 'Academic title', 'e.g. ผศ. / Prof. Dr.')}
@@ -100,7 +98,7 @@ export function SpeakerEditor({
           </div>
           {field('department', 'Department / Faculty', 'e.g. คณะวิศวกรรมศาสตร์')}
           <p className="my-[18px] text-[10px] text-[#929899]">
-            Thai and English text are supported. Changes appear in OBS immediately.
+            Thai and English text are supported. Changes are saved in this browser.
           </p>
           <div className="flex justify-end gap-2">
             <button
@@ -113,10 +111,9 @@ export function SpeakerEditor({
             <button
               className={buttonClass('primary')}
               type="submit"
-              disabled={saving}
             >
               <Save size={16} />
-              {saving ? 'Saving…' : 'Save speaker'}
+              Save speaker
             </button>
           </div>
         </form>

@@ -5,7 +5,6 @@ import { buttonClass, cardClass, eyebrowClass } from '../ui';
 export function SpeakerList({
   speakers,
   selectedId,
-  connected,
   onSelect,
   onShow,
   onEdit,
@@ -14,7 +13,6 @@ export function SpeakerList({
 }: {
   speakers: Speaker[];
   selectedId: string | null;
-  connected: boolean;
   onSelect: (id: string) => void;
   onShow: (id: string) => void;
   onEdit: (speaker: Speaker) => void;
@@ -38,7 +36,7 @@ export function SpeakerList({
             <span className="font-normal text-[#a3a6a7]">({speakers.length})</span>
           </h2>
           <p className="mb-0 mt-1.5 text-[11px] text-[#9ba0a1]">
-            Manage names and titles for your next broadcast.
+            Manage the profiles shown in your preview.
           </p>
         </div>
         <button
@@ -93,7 +91,6 @@ export function SpeakerList({
                     <button
                       className="flex w-full items-center gap-[13px] border-0 bg-transparent px-[14px] py-[15px] text-left disabled:cursor-not-allowed disabled:opacity-50"
                       onClick={() => onSelect(speaker.id)}
-                      disabled={!connected}
                       aria-label={`Select ${speaker.name}`}
                       aria-pressed={speaker.id === selectedId}
                     >
@@ -132,7 +129,6 @@ export function SpeakerList({
                         className="grid size-[30px] place-items-center rounded-[3px] border-0 bg-transparent text-[#8b9092] hover:bg-[#fff0e9] hover:text-[#df5b2b] disabled:cursor-not-allowed disabled:opacity-50"
                         aria-label={`Show ${speaker.name}`}
                         title="Show speaker"
-                        disabled={!connected}
                         onClick={() => onShow(speaker.id)}
                       >
                         <Play size={16} />

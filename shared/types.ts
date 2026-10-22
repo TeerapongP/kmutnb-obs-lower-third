@@ -44,7 +44,6 @@ export type Speaker = {
 export type Settings = {
   template: Template;
   speed: number;
-  autoShow: boolean;
   animation: LowerThirdAnimationSettings;
 };
 
@@ -129,7 +128,6 @@ export const initialData: SavedData = {
   settings: {
     template: 'standard',
     speed: 1,
-    autoShow: false,
     animation: {
       effect: 'slide-up',
       duration: 0.65,

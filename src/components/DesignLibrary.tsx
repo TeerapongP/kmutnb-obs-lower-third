@@ -27,7 +27,7 @@ export function DesignLibrary({
             Choose a design
           </h2>
           <p className="mb-0 mt-[7px] text-xs text-[#9ba0a1]">
-            Four broadcast-ready styles. Switch live without refreshing OBS.
+            Four styles to preview in the studio.
           </p>
         </div>
         <span className="font-['DM_Sans'] text-[10px] font-extrabold tracking-[0.12em] text-[#a0a4a5]">
