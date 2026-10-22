@@ -10,6 +10,7 @@ import { DesignLibrary } from './components/DesignLibrary';
 import { SpeakerList } from './components/SpeakerList';
 import { SpeakerEditor } from './components/SpeakerEditor';
 import { DashboardSection } from './components/DashboardSection';
+import { ControlAccess } from './components/ControlAccess';
 import { buttonClass } from './ui';
 
 export function ControlPage() {
@@ -164,6 +165,9 @@ export function ControlPage() {
             Copy overlay URL
           </button>
         </section>
+        <div id="settings">
+          <ControlAccess />
+        </div>
         <footer className="flex justify-between px-px py-[27px] font-['DM_Sans'] text-[9px] font-bold tracking-[0.11em] text-[#a7abad] max-[680px]:gap-4">
           <span>KMUTNB BROADCAST STUDIO</span>
           <span>Built for the moments that matter on air.</span>

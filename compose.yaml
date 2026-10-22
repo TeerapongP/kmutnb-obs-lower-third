@@ -1,0 +1,18 @@
+services:
+  app:
+    build:
+      context: .
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      HOST: 0.0.0.0
+      DATA_FILE: /app/data/config.json
+      CONTROL_TOKEN: ${CONTROL_TOKEN:?Set CONTROL_TOKEN in a .env file next to compose.yaml before starting}
+    ports:
+      - '127.0.0.1:3000:3000'
+    volumes:
+      - app-data:/app/data
+    restart: unless-stopped
+
+volumes:
+  app-data:

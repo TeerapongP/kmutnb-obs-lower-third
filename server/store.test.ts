@@ -3,7 +3,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import { nextSpeakerId } from '../shared/types';
-import { isIncomingCommand, parseSettings, parseSpeaker, Store } from './store';
+import { isAuthorized, isIncomingCommand, parseSettings, parseSpeaker, Store } from './store';
 
 const directories: string[] = [];
 afterEach(() => {
@@ -63,6 +63,19 @@ describe('incoming command validation', () => {
     expect(isIncomingCommand({})).toBe(false);
     expect(isIncomingCommand({ type: 42 })).toBe(false);
     expect(isIncomingCommand({ type: 'select', speakerId: 42 })).toBe(false);
+  });
+});
+
+describe('mutation authorization', () => {
+  it('allows every request when no token is configured', () => {
+    expect(isAuthorized(null, undefined)).toBe(true);
+    expect(isAuthorized(null, 'Bearer anything')).toBe(true);
+  });
+  it('requires a matching bearer token once one is configured', () => {
+    expect(isAuthorized('secret', 'Bearer secret')).toBe(true);
+    expect(isAuthorized('secret', undefined)).toBe(false);
+    expect(isAuthorized('secret', 'Bearer wrong')).toBe(false);
+    expect(isAuthorized('secret', 'secret')).toBe(false);
   });
 });
 
