@@ -17,8 +17,9 @@ export type LowerThirdProps = {
 };
 
 const O = '#F4511E';
-const D = '#242528';
 const visiblePart = { opacity: 1, x: 0, y: 0, filter: 'blur(0px)' };
+const tiltedArtwork = '/assets/lower-third-2-tilted.svg';
+const roundedArtwork = '/assets/lower-third-4-rounded.svg';
 
 function partAnimation(
   parts: LowerThirdPartControls | undefined,
@@ -26,92 +27,6 @@ function partAnimation(
   staggerParts: boolean,
 ) {
   return staggerParts && parts ? parts[part] : visiblePart;
-}
-
-function Identity({
-  x,
-  y,
-  dark = false,
-  logoSrc,
-  logoSize = 89,
-}: {
-  x: number;
-  y: number;
-  dark?: boolean;
-  logoSrc?: string;
-  logoSize?: number;
-}) {
-  return (
-    <g>
-      <circle
-        cx={x + logoSize / 2}
-        cy={y + logoSize / 2}
-        r={logoSize / 2 + 2}
-        fill="white"
-      />
-      {logoSrc ? (
-        <image
-          href={logoSrc}
-          x={x}
-          y={y}
-          width={logoSize}
-          height={logoSize}
-          preserveAspectRatio="xMidYMid meet"
-        />
-      ) : (
-        <g>
-          <circle
-            cx={x + logoSize / 2}
-            cy={y + logoSize / 2}
-            r={logoSize / 2 - 5}
-            fill="none"
-            stroke={O}
-            strokeWidth="2"
-          />
-          <text
-            x={x + logoSize / 2}
-            y={y + logoSize / 2 + 4}
-            fontSize="12"
-            fontWeight="bold"
-            textAnchor="middle"
-            fill={O}
-          >
-            KMUTNB
-          </text>
-        </g>
-      )}
-      <text
-        x={x + logoSize + 19}
-        y={y + 43}
-        fill={dark ? O : 'white'}
-        fontFamily="Arial,sans-serif"
-        fontWeight="900"
-        fontSize="35"
-      >
-        KMUTNB
-      </text>
-      <text
-        x={x + logoSize + 20}
-        y={y + 62}
-        fill={dark ? '#333' : 'white'}
-        fontFamily="Arial,sans-serif"
-        fontWeight="700"
-        fontSize="8.7"
-      >
-        KING MONGKUT&apos;S UNIVERSITY
-      </text>
-      <text
-        x={x + logoSize + 20}
-        y={y + 74}
-        fill={dark ? '#333' : 'white'}
-        fontFamily="Arial,sans-serif"
-        fontWeight="700"
-        fontSize="8.7"
-      >
-        OF TECHNOLOGY NORTH BANGKOK
-      </text>
-    </g>
-  );
 }
 
 function TextContent({
@@ -123,6 +38,7 @@ function TextContent({
   width = 655,
   nameY = 20,
   subtitleY = 79,
+  subtitleFontSize = 14,
   parts,
   staggerParts,
 }: {
@@ -134,6 +50,7 @@ function TextContent({
   width?: number;
   nameY?: number;
   subtitleY?: number;
+  subtitleFontSize?: number;
   parts?: LowerThirdPartControls;
   staggerParts: boolean;
 }) {
@@ -180,7 +97,7 @@ function TextContent({
               color: subtitleColor,
               fontFamily: "'Noto Sans Thai','Sarabun','Prompt',sans-serif",
               fontWeight: 700,
-              fontSize: 19,
+              fontSize: subtitleFontSize,
               lineHeight: '31px',
               whiteSpace: 'nowrap',
               overflow: 'hidden',
@@ -245,6 +162,18 @@ export function LowerThird({
   const panelAnimation = partAnimation(parts, 'panel', staggerParts);
   const decorationAnimation = partAnimation(parts, 'decoration', staggerParts);
   const logoAnimation = partAnimation(parts, 'logo', staggerParts);
+  const artwork =
+    variant === 'classic'
+      ? {
+          src: '/assets/Classic_1.svg',
+          width: classicArtwork.width,
+          height: classicArtwork.height,
+        }
+      : variant === 'angular'
+        ? { src: tiltedArtwork, width: 1270, height: 130 }
+        : variant === 'rounded'
+          ? { src: roundedArtwork, width: 1270, height: 130 }
+          : null;
 
   return (
     <svg
@@ -256,7 +185,7 @@ export function LowerThird({
         overflow: 'visible',
         ...style,
       }}
-      viewBox={variant === 'classic' ? `0 0 ${classicArtwork.width} ${classicArtwork.height}` : '0 0 1200 140'}
+      viewBox={artwork ? `0 0 ${artwork.width} ${artwork.height}` : '0 0 1200 140'}
       preserveAspectRatio="xMidYMid meet"
       xmlns="http://www.w3.org/2000/svg"
       role="img"
@@ -322,21 +251,21 @@ export function LowerThird({
             stopOpacity="0"
           />
         </linearGradient>
-        {variant === 'classic' ? (
+        {artwork ? (
           <mask
             id={shape}
             x="0"
             y="0"
-            width={classicArtwork.width}
-            height={classicArtwork.height}
+            width={artwork.width}
+            height={artwork.height}
             maskUnits="userSpaceOnUse"
             maskContentUnits="userSpaceOnUse"
             style={{ maskType: 'alpha' }}
           >
             <image
-              href="/assets/Classic_1.svg"
-              width={classicArtwork.width}
-              height={classicArtwork.height}
+              href={artwork.src}
+              width={artwork.width}
+              height={artwork.height}
             />
           </mask>
         ) : (
@@ -392,61 +321,20 @@ export function LowerThird({
             initial={false}
             animate={panelAnimation}
           >
-            <path
-              d="M15 34Q13 27 23 27H132L97 117H39Z"
-              fill={O}
-            />
-            <path
-              d="M1042 28H1132Q1141 28 1138 37L1101 117H1005Z"
-              fill={O}
-            />
-            <path
-              d="M394 70H1036L1005 117H418Z"
-              fill={D}
-            />
-            <path
-              d="M338 15H1101L1078 70H386Z"
-              fill={`url(#${white})`}
-            />
-            <path
-              d="M88 15H347L418 117H82Q55 117 49 95L34 44Q27 15 88 15Z"
-              fill={`url(#${white})`}
-            />
-          </motion.g>
-          <motion.g
-            initial={false}
-            animate={decorationAnimation}
-          >
-            <path
-              d="M1069 15H1081L1036 117H1023Z"
-              fill="#fff"
-            />
-            <path
-              d="M1084 15H1099L1053 117H1038Z"
-              fill={O}
-            />
-            <path
-              d="M1102 15H1110L1064 117H1056Z"
-              fill="#fff"
-            />
-          </motion.g>
-          <motion.g
-            initial={false}
-            animate={logoAnimation}
-          >
-            <Identity
-              x={65}
-              y={22}
-              logoSrc={logoSrc}
-              logoSize={86}
-              dark
+            <image
+              href={tiltedArtwork}
+              width="1270"
+              height="130"
+              preserveAspectRatio="xMidYMid meet"
             />
           </motion.g>
           <TextContent
             name={name}
             subtitle={subtitle}
-            x={466}
-            width={550}
+            x={510}
+            width={660}
+            nameY={18}
+            subtitleY={68}
             parts={parts}
             staggerParts={staggerParts}
           />
@@ -562,48 +450,20 @@ export function LowerThird({
             initial={false}
             animate={panelAnimation}
           >
-            <rect
-              x="12"
-              y="10"
-              width="1164"
-              height="120"
-              rx="61"
-              fill={O}
-            />
-            <path
-              d="M381 10H1065Q1128 10 1128 69Q1128 123 1065 123H434Q415 112 403 87L365 27Q358 15 381 10Z"
-              fill={`url(#${white})`}
-            />
-            <path
-              d="M422 76H1057Q1086 76 1086 96Q1086 114 1060 114H444Z"
-              fill={O}
-            />
-          </motion.g>
-          <motion.path
-            initial={false}
-            animate={decorationAnimation}
-            d="M378 10Q397 22 407 47Q422 90 444 123"
-            stroke="#fff"
-            strokeWidth="5"
-            fill="none"
-            opacity=".9"
-          />
-          <motion.g
-            initial={false}
-            animate={logoAnimation}
-          >
-            <Identity
-              x={24}
-              y={20}
-              logoSrc={logoSrc}
-              logoSize={89}
+            <image
+              href={roundedArtwork}
+              width="1270"
+              height="130"
+              preserveAspectRatio="xMidYMid meet"
             />
           </motion.g>
           <TextContent
             name={name}
             subtitle={subtitle}
-            x={450}
+            x={505}
             width={605}
+            nameY={16}
+            subtitleY={70}
             parts={parts}
             staggerParts={staggerParts}
           />
@@ -636,7 +496,8 @@ export function LowerThird({
           width="220"
           height="140"
           fill={`url(#${sweep})`}
-          clipPath={`url(#${shape})`}
+          mask={artwork ? `url(#${shape})` : undefined}
+          clipPath={artwork ? undefined : `url(#${shape})`}
           transform="skewX(-18)"
           style={{ mixBlendMode: 'screen' }}
         />

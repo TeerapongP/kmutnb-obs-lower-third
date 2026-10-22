@@ -33,6 +33,20 @@ describe('overlay template registry', () => {
     expect(renderTemplate(template)).toContain('cg-svg-bar');
   });
 
+  it.each(svgTemplates)('uses the same subtitle size for %s', (template) => {
+    expect(renderTemplate(template)).toContain('font-size:14px');
+  });
+
+  it('uses the tilted and rounded artwork with the selected speaker text', () => {
+    const tilted = renderTemplate('modern');
+    const rounded = renderTemplate('minimal');
+
+    expect(tilted).toContain('href="/assets/lower-third-2-tilted.svg"');
+    expect(tilted).toContain(initialData.speakers[0].name);
+    expect(rounded).toContain('href="/assets/lower-third-4-rounded.svg"');
+    expect(rounded).toContain(initialData.speakers[0].name);
+  });
+
   it.each(legacyTemplates)('routes %s through the shared legacy renderer', (template) => {
     expect(templateRegistry[template].renderer).toBe('legacy');
     expect(renderTemplate(template)).toContain(`cg-bar cg-${template}`);
