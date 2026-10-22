@@ -121,7 +121,7 @@ function LegacyCGBar({
     textControls.stop();
     panelControls.stop();
     sweepControls.stop();
-    if (!visible || !speaker) {
+    if (!visible) {
       void textControls.start({
         opacity: 0,
         y: 15,
@@ -185,7 +185,7 @@ function LegacyCGBar({
     textControls,
     panelControls,
     sweepControls,
-    speaker?.id,
+    speaker.id,
     staticPreview,
   ]);
 

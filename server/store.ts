@@ -32,6 +32,20 @@ export function parseSpeaker(value: unknown, id: string = randomUUID()): Speaker
   };
 }
 
+export type IncomingCommand = { type: string; speakerId?: string };
+
+export function isIncomingCommand(value: unknown): value is IncomingCommand {
+  if (typeof value !== 'object' || value === null) return false;
+  if (!('type' in value) || typeof value.type !== 'string') return false;
+  if (
+    'speakerId' in value &&
+    value.speakerId !== undefined &&
+    typeof value.speakerId !== 'string'
+  )
+    return false;
+  return true;
+}
+
 export function parseSettings(value: unknown, current: Settings): Settings {
   if (!value || typeof value !== 'object') throw new Error('Invalid settings.');
   const input = value as Record<string, unknown>;

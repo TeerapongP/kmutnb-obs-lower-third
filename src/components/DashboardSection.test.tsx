@@ -66,7 +66,7 @@ describe('dashboard summary', () => {
   it('derives the count, selected label, template name and application overlay state from the snapshot', () => {
     const text = visibleText(dashboard());
     expect(text).toContain(
-      'Speakers 2 Selected speaker Dr. Ada Lovelace Template Angular Application overlay Visible',
+      'Speakers 2 Selected speaker Dr. Ada Lovelace Template Tilted Application overlay Visible',
     );
     expect(text).toContain('OBS broadcast status is not monitored.');
   });
@@ -103,7 +103,7 @@ describe('dashboard summary', () => {
       live: { visible: false, cue: 0 },
     };
     expect(visibleText(dashboard({ snapshot: empty }))).toContain(
-      'Speakers 0 Selected speaker None selected Template Angular Application overlay Hidden',
+      'Speakers 0 Selected speaker None selected Template Tilted Application overlay Hidden',
     );
     const markup = lineup(empty);
     expect(markup).toContain('<table');

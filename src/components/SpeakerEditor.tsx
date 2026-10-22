@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react';
+import { useState, type SubmitEvent } from 'react';
 import { Save, X } from 'lucide-react';
 import type { Speaker } from '../../shared/types';
 import { api } from '../live';
@@ -45,7 +45,7 @@ export function SpeakerEditor({
       </label>
     );
   }
-  async function save(event: FormEvent) {
+  async function save(event: SubmitEvent) {
     event.preventDefault();
     setSaving(true);
     try {
@@ -92,7 +92,7 @@ export function SpeakerEditor({
             <X size={20} />
           </button>
         </div>
-        <form onSubmit={save}>
+        <form onSubmit={(event) => void save(event)}>
           {field('name', 'Speaker name *', 'e.g. ดร. กานต์ชนก วัฒนกุล', true)}
           <div className="grid grid-cols-[1fr_1.4fr] gap-3 max-[680px]:grid-cols-1">
             {field('academicTitle', 'Academic title', 'e.g. ผศ. / Prof. Dr.')}

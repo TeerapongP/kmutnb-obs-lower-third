@@ -127,7 +127,7 @@ export function ControlPage() {
             onSelect={(id) => run('select', id)}
             onShow={(id) => run('show', id)}
             onEdit={setEditing}
-            onDelete={remove}
+            onDelete={(speaker) => void remove(speaker)}
             onAdd={() => setEditing('new')}
           />
         )}
@@ -158,7 +158,7 @@ export function ControlPage() {
                 'focus-visible:ring-offset-[#23282B] ' +
                 'transition-all duration-200 max-[680px]:w-full',
             )}
-            onClick={copyLink}
+            onClick={() => void copyLink()}
           >
             <Copy size={16} />
             Copy overlay URL

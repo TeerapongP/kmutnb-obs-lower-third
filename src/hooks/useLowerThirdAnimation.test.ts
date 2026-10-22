@@ -6,7 +6,7 @@ import { useLowerThirdAnimation } from './useLowerThirdAnimation';
 type TestControl = {
   stop: ReturnType<typeof vi.fn>;
   set: ReturnType<typeof vi.fn>;
-  start: ReturnType<typeof vi.fn>;
+  start: ReturnType<typeof vi.fn<(target: Record<string, unknown>) => void>>;
 };
 
 const mocks = vi.hoisted(() => ({
@@ -39,7 +39,7 @@ function setupControls() {
   const controls = Array.from({ length: 7 }, () => ({
     stop: vi.fn(),
     set: vi.fn(),
-    start: vi.fn(),
+    start: vi.fn<(target: Record<string, unknown>) => void>(),
   }));
   mocks.controls.push(...controls);
   mocks.refs.push(

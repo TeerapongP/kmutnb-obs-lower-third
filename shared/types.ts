@@ -58,7 +58,7 @@ export type Snapshot = SavedData & { live: LiveState };
 
 export const templateInfo: Record<Template, { name: string; description: string }> = {
   standard: { name: 'Classic', description: 'Orange brand · white name' },
-  modern: { name: 'Angular', description: 'Slanted panels · bold edge' },
+  modern: { name: 'Tilted', description: 'Slanted panels · bold edge' },
   glass: { name: 'Overlay', description: 'Transparent dark frame' },
   minimal: { name: 'Rounded', description: 'Soft curves · orange ribbon' },
   premium: { name: 'Premium', description: 'Illuminated accent' },
@@ -75,7 +75,7 @@ export const designTemplates = [
   {
     id: 'modern',
     number: '02',
-    name: 'Angular',
+    name: 'Tilted',
     description: 'Slanted panels · bold edge',
   },
   {

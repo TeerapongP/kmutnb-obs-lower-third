@@ -3,7 +3,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import { nextSpeakerId } from '../shared/types';
-import { parseSettings, parseSpeaker, Store } from './store';
+import { isIncomingCommand, parseSettings, parseSpeaker, Store } from './store';
 
 const directories: string[] = [];
 afterEach(() => {
@@ -49,6 +49,20 @@ describe('speaker and settings validation', () => {
       enabled: true,
     });
     expect(() => parseSettings({ animation: { duration: 2.6 } }, previous)).toThrow();
+  });
+});
+
+describe('incoming command validation', () => {
+  it('accepts a well-formed command with or without a speakerId', () => {
+    expect(isIncomingCommand({ type: 'show' })).toBe(true);
+    expect(isIncomingCommand({ type: 'select', speakerId: 'narin' })).toBe(true);
+  });
+  it('rejects malformed or untyped payloads from an untrusted socket client', () => {
+    expect(isIncomingCommand(null)).toBe(false);
+    expect(isIncomingCommand('select')).toBe(false);
+    expect(isIncomingCommand({})).toBe(false);
+    expect(isIncomingCommand({ type: 42 })).toBe(false);
+    expect(isIncomingCommand({ type: 'select', speakerId: 42 })).toBe(false);
   });
 });
 

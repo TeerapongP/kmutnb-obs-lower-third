@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Play, RotateCcw, Settings2 } from 'lucide-react';
 import type { LowerThirdAnimationSettings, Settings } from '../../shared/types';
 import { animationEasingOptions, animationEffectOptions } from '../animations/presets';
@@ -13,12 +13,12 @@ type Props = {
 
 export function AnimationSettings({ settings, onChange, onPreview, onReplay }: Props) {
   const [duration, setDuration] = useState(settings.animation.duration);
+  const [syncedDuration, setSyncedDuration] = useState(settings.animation.duration);
+  if (settings.animation.duration !== syncedDuration) {
+    setSyncedDuration(settings.animation.duration);
+    setDuration(settings.animation.duration);
+  }
   const progress = ((duration - 0.3) / (2.5 - 0.3)) * 100;
-
-  useEffect(
-    () => setDuration(settings.animation.duration),
-    [settings.animation.duration],
-  );
 
   function update(change: Partial<LowerThirdAnimationSettings>) {
     onChange({ animation: { ...settings.animation, ...change } });
