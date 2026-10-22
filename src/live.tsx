@@ -72,10 +72,10 @@ export function LiveProvider({ children }: { children: ReactNode }) {
       connectionError,
       command: (command) =>
         new Promise<void>((resolve, reject) => {
-          if (!socket.connected)
-            return reject(
-              new Error('Connection lost. Wait for the server to reconnect.'),
-            );
+          if (!socket.connected) {
+            reject(new Error('Connection lost. Wait for the server to reconnect.'));
+            return;
+          }
           socket
             .timeout(5000)
             .emit(
@@ -114,8 +114,15 @@ export async function api<T>(path: string, method: string, body?: unknown): Prom
     throw new Error('Could not reach the server.');
   }
   if (!response.ok) {
-    const result = await response.json().catch(() => ({}));
-    throw new Error(result.error || `Request failed (${response.status}).`);
+    const result: unknown = await response.json().catch(() => null);
+    const message =
+      result &&
+      typeof result === 'object' &&
+      'error' in result &&
+      typeof result.error === 'string'
+        ? result.error
+        : undefined;
+    throw new Error(message || `Request failed (${response.status}).`);
   }
   return response.status === 204 ? (undefined as T) : (response.json() as Promise<T>);
 }

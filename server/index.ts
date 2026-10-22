@@ -5,7 +5,7 @@ import express, { type Request, type Response } from 'express';
 import { Server } from 'socket.io';
 import { createServer as createViteServer } from 'vite';
 import { nextSpeakerId, type Snapshot } from '../shared/types';
-import { parseSettings, parseSpeaker, Store } from './store';
+import { isIncomingCommand, parseSettings, parseSpeaker, Store } from './store';
 
 if (existsSync('.env')) process.loadEnvFile('.env');
 const port = Number(process.env.PORT || 3000);
@@ -98,17 +98,13 @@ app.patch('/api/settings', (request, response) => {
   }
 });
 
-type Command = {
-  type: 'select' | 'show' | 'hide' | 'next' | 'replay';
-  speakerId?: string;
-};
 io.on('connection', (socket) => {
   socket.emit('snapshot', snapshot());
   socket.on(
     'command',
-    (command: Command, ack?: (result: { ok: boolean; error?: string }) => void) => {
+    (command: unknown, ack?: (result: { ok: boolean; error?: string }) => void) => {
       try {
-        if (!command || typeof command !== 'object') throw new Error('Invalid command.');
+        if (!isIncomingCommand(command)) throw new Error('Invalid command.');
         const data = store.get();
         if (command.type === 'select' || command.type === 'show') {
           const id = command.speakerId ?? data.selectedSpeakerId;

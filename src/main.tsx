@@ -6,7 +6,10 @@ import { ControlPage } from './Control';
 import './styles.css';
 import './styles/overlay.css';
 
-createRoot(document.getElementById('root')!).render(
+const root = document.getElementById('root');
+if (!root) throw new Error('Root element #root is missing from index.html.');
+
+createRoot(root).render(
   <React.StrictMode>
     <LiveProvider>
       {location.pathname === '/overlay' ? <OverlayPage /> : <ControlPage />}
