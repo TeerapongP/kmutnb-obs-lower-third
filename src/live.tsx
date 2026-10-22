@@ -21,12 +21,33 @@ type LiveContextValue = {
   command: (command: Command) => Promise<void>;
 };
 
+const API_BASE: string = import.meta.env.VITE_API_URL ?? '';
+const CONTROL_TOKEN_KEY = 'cgControlToken';
+
+export function getControlToken(): string {
+  try {
+    return localStorage.getItem(CONTROL_TOKEN_KEY) ?? '';
+  } catch {
+    return '';
+  }
+}
+
+export function setControlToken(token: string): void {
+  try {
+    if (token) localStorage.setItem(CONTROL_TOKEN_KEY, token);
+    else localStorage.removeItem(CONTROL_TOKEN_KEY);
+  } catch {
+    // Storage may be unavailable (private browsing, disabled cookies); ignore.
+  }
+}
+
 const LiveContext = createContext<LiveContextValue | null>(null);
-const socket: Socket = io({
+const socket: Socket = io(API_BASE || undefined, {
   autoConnect: false,
   reconnection: true,
   reconnectionDelay: 500,
   reconnectionDelayMax: 5000,
+  auth: (callback) => callback({ token: getControlToken() }),
 });
 
 export function LiveProvider({ children }: { children: ReactNode }) {
@@ -103,11 +124,15 @@ export function useLive() {
 }
 
 export async function api<T>(path: string, method: string, body?: unknown): Promise<T> {
+  const token = getControlToken();
+  const headers: Record<string, string> = {};
+  if (body !== undefined) headers['Content-Type'] = 'application/json';
+  if (token) headers['Authorization'] = `Bearer ${token}`;
   let response: Response;
   try {
-    response = await fetch(`/api${path}`, {
+    response = await fetch(`${API_BASE}/api${path}`, {
       method,
-      headers: body === undefined ? undefined : { 'Content-Type': 'application/json' },
+      headers: Object.keys(headers).length ? headers : undefined,
       body: body === undefined ? undefined : JSON.stringify(body),
     });
   } catch {

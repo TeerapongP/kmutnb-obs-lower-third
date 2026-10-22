@@ -25,6 +25,14 @@ NODE_ENV=production npm start
 
 Copy `.env.example` to `.env` to change `PORT`, `HOST`, or `DATA_FILE`. The default port is **3000**.
 
+## Deployment (frontend and backend on separate hosts)
+
+This app is one Express + Socket.IO process serving both the UI and the API locally. A static host like Vercel cannot run that process, so it can only serve the built frontend — the backend needs an always-on Node host (Render, Railway, Fly.io, a VPS, etc.) running `npm run build && NODE_ENV=production npm start`.
+
+1. Deploy `server/index.ts` to an always-on Node host with a persistent disk for `DATA_FILE`. Set `CORS_ORIGIN` to the frontend's origin(s) and `CONTROL_TOKEN` to a long random secret — see `.env.example` for details. Leaving `CONTROL_TOKEN` unset leaves mutation endpoints and commands unauthenticated; do not do this on a publicly reachable deployment.
+2. Deploy the frontend (`npm run build`'s `dist/`) to a static host. Set `VITE_API_URL` to the backend's public `https://` URL at build time.
+3. On the live control page, open **Settings** and paste the `CONTROL_TOKEN` value once — it's stored in this browser only and sent with every cue and edit. The overlay page needs no token; it only ever receives `snapshot` broadcasts.
+
 ## OBS setup
 
 1. Add a **Browser Source** to your OBS scene.

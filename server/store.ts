@@ -19,6 +19,14 @@ function stringField(value: unknown, max: number, required = false): string {
   return text;
 }
 
+export function isAuthorized(
+  configuredToken: string | null,
+  authorizationHeader: string | undefined,
+): boolean {
+  if (!configuredToken) return true;
+  return authorizationHeader === `Bearer ${configuredToken}`;
+}
+
 export function parseSpeaker(value: unknown, id: string = randomUUID()): Speaker {
   if (!value || typeof value !== 'object') throw new Error('Invalid speaker.');
   const item = value as Record<string, unknown>;
