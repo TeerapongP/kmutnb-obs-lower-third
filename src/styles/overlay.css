@@ -1,15 +1,4 @@
-/* OBS renders this canvas at 1920 × 1080. Templates 1–4 use a shared SVG renderer;
-   the legacy CSS below remains only for templates 5–6. */
-.overlay-root,
-.overlay-body,
-.overlay-body #root {
-  width: 1920px;
-  height: 1080px;
-  margin: 0;
-  overflow: hidden;
-  background: transparent !important;
-}
-
+/* The fixed canvas is scaled inside the responsive studio preview. */
 .overlay-canvas {
   position: relative;
   width: 1920px;

@@ -33,9 +33,19 @@ describe('overlay template registry', () => {
     expect(renderTemplate(template)).toContain('cg-svg-bar');
   });
 
-  it.each(svgTemplates)('uses the same subtitle size for %s', (template) => {
-    expect(renderTemplate(template)).toContain('font-size:14px');
-  });
+  it.each([
+    ['standard', '42px', '17px'],
+    ['modern', '34px', '14px'],
+    ['glass', '34px', '14px'],
+    ['minimal', '34px', '14px'],
+  ] as const)(
+    'scales %s text to match the visual size of other designs',
+    (template, nameSize, subtitleSize) => {
+      const markup = renderTemplate(template);
+      expect(markup).toContain(`font-size:${nameSize}`);
+      expect(markup).toContain(`font-size:${subtitleSize}`);
+    },
+  );
 
   it('uses the tilted and rounded artwork with the selected speaker text', () => {
     const tilted = renderTemplate('modern');

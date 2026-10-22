@@ -45,7 +45,7 @@ export function AnimationSettings({ settings, onChange, onPreview, onReplay }: P
         </div>
       </div>
       <p className="mb-[17px] mt-[13px] text-[11px] text-[#9da1a2]">
-        Configure the motion used by preview and OBS output.
+        Configure the motion shown in the local preview.
       </p>
 
       <div className="grid grid-cols-2 gap-3 max-[900px]:grid-cols-1">
@@ -144,7 +144,7 @@ export function AnimationSettings({ settings, onChange, onPreview, onReplay }: P
           onClick={onReplay}
         >
           <RotateCcw size={15} />
-          Replay on air
+          Replay preview animation
         </button>
       </div>
 
@@ -161,22 +161,6 @@ export function AnimationSettings({ settings, onChange, onPreview, onReplay }: P
           type="checkbox"
           checked={settings.animation.enabled}
           onChange={(event) => update({ enabled: event.target.checked })}
-        />
-        <span className="relative h-[22px] w-10 flex-none rounded-[15px] bg-[#dfe2e3] transition-colors after:absolute after:left-[3px] after:top-[3px] after:size-4 after:rounded-full after:bg-white after:shadow-[0_1px_3px_#0002] after:transition-transform after:content-[''] peer-checked:bg-brand peer-checked:after:translate-x-[18px] peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-[3px] peer-focus-visible:outline-brand" />
-      </label>
-      <div className="my-[19px] h-px bg-[#eeefef]" />
-      <label className="relative flex cursor-pointer items-center justify-between gap-4">
-        <span>
-          <strong className="block text-xs font-semibold">Auto-show on startup</strong>
-          <small className="mt-0.5 block text-[10px] text-[#a2a5a7]">
-            Display the selected speaker when the server starts
-          </small>
-        </span>
-        <input
-          className="peer absolute right-0 opacity-0"
-          type="checkbox"
-          checked={settings.autoShow}
-          onChange={(event) => onChange({ autoShow: event.target.checked })}
         />
         <span className="relative h-[22px] w-10 flex-none rounded-[15px] bg-[#dfe2e3] transition-colors after:absolute after:left-[3px] after:top-[3px] after:size-4 after:rounded-full after:bg-white after:shadow-[0_1px_3px_#0002] after:transition-transform after:content-[''] peer-checked:bg-brand peer-checked:after:translate-x-[18px] peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-[3px] peer-focus-visible:outline-brand" />
       </label>

@@ -19,7 +19,6 @@ export function TemplatePreview({ template }: { template: Template }) {
     settings: {
       template,
       speed: 1,
-      autoShow: false,
       animation: {
         effect: 'slide-up',
         duration: 0.65,
