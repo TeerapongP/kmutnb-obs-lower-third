@@ -22,7 +22,7 @@ The generated `dist/` directory can be hosted as a static site. `npm run preview
 
 ## Data and scope
 
-The app has no API server, database, authentication service, or network synchronization. Saved data belongs to one browser profile on one device. Clearing browser site data removes it. The page renders a local preview only. It does not provide an OBS Browser Source or report external broadcasting status.
+The app has no API server, database, authentication service, or network synchronization. Saved data belongs to one browser profile on one device. Clearing browser site data removes it. **Copy OBS link** creates a transparent `/overlay` Browser Source URL containing a snapshot of the current graphic. Copy a fresh link after changing speaker, design, or visibility; the link does not receive live updates from the dashboard.
 
 The design picker includes Classic, Tilted, Overlay, and Rounded. The first four designs use the SVG renderer in `src/components/LowerThird.tsx`; `public/assets/Classic_1.svg` supplies the Classic artwork, and the other designs use `public/assets/kmutnb-seal.png`. The additional Premium and Speaker styles remain available in the local preview.
 

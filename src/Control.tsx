@@ -10,6 +10,7 @@ import { DesignLibrary } from './components/DesignLibrary';
 import { SpeakerList } from './components/SpeakerList';
 import { SpeakerEditor } from './components/SpeakerEditor';
 import { DashboardSection } from './components/DashboardSection';
+import { ObsSourceLink } from './components/ObsSourceLink';
 import { buttonClass } from './ui';
 
 export function ControlPage() {
@@ -84,6 +85,7 @@ export function ControlPage() {
           snapshot={snapshot}
           persistenceError={persistenceError}
         />
+        <ObsSourceLink snapshot={snapshot} />
         <PreviewPanel
           snapshot={snapshot}
           previewCue={previewCue}
