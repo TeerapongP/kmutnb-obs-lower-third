@@ -1,4 +1,11 @@
-import { createContext, useContext, useRef, useState, type ReactNode } from 'react';
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from 'react';
 import {
   initialData,
   animationEasings,
@@ -10,6 +17,7 @@ import {
   type Snapshot,
   type Speaker,
 } from '../shared/types';
+import { publishOverlaySnapshot } from './obsSync';
 
 const STORAGE_KEY = 'kmutnb-cg-studio';
 
@@ -25,6 +33,7 @@ type Action =
 type StudioContextValue = {
   snapshot: Snapshot;
   persistenceError: string | null;
+  obsSyncError: string | null;
   command: (command: Command) => void;
   updateSettings: (change: Partial<Settings>) => void;
   saveSpeaker: (speaker: Speaker) => void;
@@ -175,7 +184,17 @@ export function StudioProvider({ children }: { children: ReactNode }) {
   const [loaded] = useState(readSavedData);
   const [snapshot, setSnapshot] = useState(loaded.snapshot);
   const [persistenceError, setPersistenceError] = useState(loaded.error);
+  const [obsSyncError, setObsSyncError] = useState<string | null>(null);
   const snapshotRef = useRef(snapshot);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      void publishOverlaySnapshot(snapshot)
+        .then(() => setObsSyncError(null))
+        .catch(() => setObsSyncError('OBS link is offline.'));
+    }, 180);
+    return () => window.clearTimeout(timer);
+  }, [snapshot]);
 
   function apply(action: Action) {
     const next = studioReducer(snapshotRef.current, action);
@@ -197,6 +216,7 @@ export function StudioProvider({ children }: { children: ReactNode }) {
   const value: StudioContextValue = {
     snapshot,
     persistenceError,
+    obsSyncError,
     command: (command) => apply({ type: 'command', command }),
     updateSettings: (change) => apply({ type: 'update-settings', change }),
     saveSpeaker: (speaker) => apply({ type: 'save-speaker', speaker }),

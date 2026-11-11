@@ -1,0 +1,15 @@
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      # Persist overlay state across container restarts
+      - overlay-data:/app/data
+    environment:
+      PORT: "3000"
+      DATA_FILE: "/app/data/overlays.json"
+    restart: unless-stopped
+
+volumes:
+  overlay-data:
