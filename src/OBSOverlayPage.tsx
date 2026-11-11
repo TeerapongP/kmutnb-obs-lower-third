@@ -1,6 +1,7 @@
-import { useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import { initialData, type Snapshot } from '../shared/types';
 import { OverlayCanvas } from './Overlay';
+import { readOverlaySnapshot } from './obsSync';
 import './styles/obs.css';
 
 function readSnapshot(): Snapshot {
@@ -31,7 +32,36 @@ function readSnapshot(): Snapshot {
 }
 
 export function OBSOverlayPage() {
-  const snapshot = useMemo(readSnapshot, []);
+  const channel = new URLSearchParams(window.location.search).get('channel');
+  const [snapshot, setSnapshot] = useState(readSnapshot);
+
+  useEffect(() => {
+    if (!channel) return;
+    const channelId = channel;
+    let active = true;
+    let previous = '';
+
+    async function refresh() {
+      try {
+        const next = await readOverlaySnapshot(channelId);
+        const serialized = JSON.stringify(next);
+        if (active && serialized !== previous) {
+          previous = serialized;
+          setSnapshot(next);
+        }
+      } catch {
+        // Keep the last rendered frame during temporary network failures.
+      }
+    }
+
+    void refresh();
+    const timer = window.setInterval(() => void refresh(), 400);
+    return () => {
+      active = false;
+      window.clearInterval(timer);
+    };
+  }, [channel]);
+
   return (
     <main className="obs-page" aria-label="OBS lower third overlay">
       <OverlayCanvas snapshot={snapshot} />

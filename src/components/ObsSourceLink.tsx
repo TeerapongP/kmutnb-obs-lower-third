@@ -2,19 +2,28 @@ import { useState } from 'react';
 import { Check, Copy, Radio } from 'lucide-react';
 import type { Snapshot } from '../../shared/types';
 import { buttonClass } from '../ui';
+import { createObsOverlayUrl } from '../obsSync';
 
-export function ObsSourceLink({ snapshot }: { snapshot: Snapshot }) {
+export function ObsSourceLink({
+  snapshot,
+  syncError,
+}: {
+  snapshot: Snapshot;
+  syncError: string | null;
+}) {
   const [copied, setCopied] = useState(false);
+  const [copyError, setCopyError] = useState('');
 
   async function copyLink() {
-    const bytes = new TextEncoder().encode(JSON.stringify(snapshot));
-    const binary = Array.from(bytes, (byte) => String.fromCharCode(byte)).join('');
-    const state = btoa(binary).replaceAll('+', '-').replaceAll('/', '_').replace(/=+$/, '');
-    const url = new URL('/overlay', window.location.origin);
-    url.searchParams.set('state', state);
-    await navigator.clipboard.writeText(url.toString());
-    setCopied(true);
-    window.setTimeout(() => setCopied(false), 2200);
+    setCopyError('');
+    try {
+      const url = await createObsOverlayUrl(snapshot);
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2200);
+    } catch {
+      setCopyError('Could not connect OBS. Please try again.');
+    }
   }
 
   return (
@@ -24,8 +33,13 @@ export function ObsSourceLink({ snapshot }: { snapshot: Snapshot }) {
           <Radio size={15} className="text-brand" /> OBS Browser Source
         </p>
         <p className="mb-0 mt-1 text-[11px] text-[#777d80]">
-          Copy a transparent overlay link for the current graphic state.
+          Design and animation changes sync automatically to the same OBS link.
         </p>
+        {(syncError || copyError) && (
+          <p className="mb-0 mt-1 text-[11px] text-red-600" role="alert">
+            {copyError || syncError}
+          </p>
+        )}
       </div>
       <button className={buttonClass('primary')} onClick={() => void copyLink()}>
         {copied ? <Check size={15} /> : <Copy size={15} />}

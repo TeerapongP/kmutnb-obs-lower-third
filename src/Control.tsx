@@ -17,6 +17,7 @@ export function ControlPage() {
   const {
     snapshot,
     persistenceError,
+    obsSyncError,
     command,
     updateSettings,
     saveSpeaker,
@@ -85,7 +86,7 @@ export function ControlPage() {
           snapshot={snapshot}
           persistenceError={persistenceError}
         />
-        <ObsSourceLink snapshot={snapshot} />
+        <ObsSourceLink snapshot={snapshot} syncError={obsSyncError} />
         <PreviewPanel
           snapshot={snapshot}
           previewCue={previewCue}
