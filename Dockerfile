@@ -21,9 +21,9 @@ COPY --from=builder /app/package.json ./package.json
 # Install tsx for running TypeScript directly (no extra build step)
 RUN npm install --ignore-scripts tsx@4 @types/node
 
-EXPOSE 3000
+EXPOSE 8888
 
 ENV NODE_ENV=production
-ENV PORT=3000
+ENV PORT=8888
 
 CMD ["node", "--import", "tsx", "server.ts"]
