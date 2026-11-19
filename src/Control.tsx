@@ -10,12 +10,14 @@ import { DesignLibrary } from './components/DesignLibrary';
 import { SpeakerList } from './components/SpeakerList';
 import { SpeakerEditor } from './components/SpeakerEditor';
 import { DashboardSection } from './components/DashboardSection';
+import { ObsSourceLink } from './components/ObsSourceLink';
 import { buttonClass } from './ui';
 
 export function ControlPage() {
   const {
     snapshot,
     persistenceError,
+    obsSyncError,
     command,
     updateSettings,
     saveSpeaker,
@@ -84,6 +86,7 @@ export function ControlPage() {
           snapshot={snapshot}
           persistenceError={persistenceError}
         />
+        <ObsSourceLink snapshot={snapshot} syncError={obsSyncError} />
         <PreviewPanel
           snapshot={snapshot}
           previewCue={previewCue}
